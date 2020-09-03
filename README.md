@@ -6,6 +6,7 @@
 **Установка**
 Скопируйте папку elehant_water в custom_components в корне конфигурации Home Assistant
 В configuration.yaml добавьте следующие строки:
+
     sensor:
     - platform: elehant_water
         devices:
