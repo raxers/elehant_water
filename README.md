@@ -1,2 +1,19 @@
 # elehant_water
-Home Assistant integration of Elehant Water Sensors
+Модуль интеграции счетчиков воды Элехан СВД-15 с Home Assistant.
+
+Для интеграции требуется наличие Bluetooth модуля в сервере HA.
+
+**Установка**
+Скопируйте папку elehant_water в custom_components в корне конфигурации Home Assistant
+В configuration.yaml добавьте следующие строки:
+    sensor:
+    - platform: elehant_water
+        devices:
+        - id: 30123
+            name: "Горячая вода"
+        - id: 30124
+            name: "Холодная вода" 
+
+Где id - номер счетчика. 
+
+Система сканирует эфир раз в 30 секунд. На считывание первичных показателей потребуется 1-5 минут. Сами счетчики передают информацию в Advertise пакетах с рваной периодичностью.
