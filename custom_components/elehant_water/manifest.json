@@ -2,7 +2,7 @@
     "domain": "elehant_water",
     "name": "elehant_water",
     "documentation": "https://www.example.com",
-    "dependencies": [],
+    "dependencies": ["aioblescan"],
     "codeowners": [],
     "requirements": []
 }
