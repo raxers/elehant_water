@@ -1,4 +1,5 @@
-Elehant Water Sensor SVD-15 for Home Assistant
+# Elehant Water Sensor SVD-15 for Home Assistant
+
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
 [![Donate](https://img.shields.io/badge/donate-Yandex-red.svg)](https://money.yandex.ru/to/41001371678546)
 
