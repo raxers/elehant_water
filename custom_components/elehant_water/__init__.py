@@ -1,0 +1,1 @@
+""" Sensor for water counter elehant SD-15 """
