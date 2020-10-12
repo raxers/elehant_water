@@ -10,28 +10,25 @@ import logging
 from homeassistant.const import (VOLUME_LITERS, STATE_UNKNOWN)
 
 _LOGGER = logging.getLogger(__name__)
-inf = {}
-
+inf={}
 
 def update_counters(call):
+    global scan_duration
     def my_process(data):
-        if time.time()-start > 10:
+        if time.time()-start >int(scan_duration):
             btctrl.stop_scan_request()
             conn.close()
             event_loop.stop()
-        ev = aiobs.HCI_Event()
+        ev=aiobs.HCI_Event()
         xx = ev.decode(data)
         try:
             mac = ev.retrieve("peer")[0].val
         except:
             return
-        if str(mac).find('b0:01:02') != -1:
-            print(ev.raw_data.hex())
-            manufacturer_data = ev.retrieve("Manufacturer Specific Data")
-            print(mac)
+        if str(mac).find('b0:01:02') !=-1:
+            manufacturer_data = ev.retrieve("Manufacturer Specific Data")   
             payload = manufacturer_data[0].payload
-            payload = payload[1].val
-            print(payload.hex())
+            payload = payload[1].val     
             c_num = int.from_bytes(payload[6:8], byteorder='little')
             c_count = int.from_bytes(payload[9:12], byteorder='little')
             inf[c_num] = c_count/10
@@ -39,10 +36,9 @@ def update_counters(call):
     event_loop = asyncio.new_event_loop()
     asyncio.set_event_loop(event_loop)
     mysocket = aiobs.create_bt_socket(0)
-    fac = event_loop._create_connection_transport(
-        mysocket, aiobs.BLEScanRequester, None, None)
-    conn, btctrl = event_loop.run_until_complete(fac)
-    btctrl.process = my_process
+    fac=event_loop._create_connection_transport(mysocket,aiobs.BLEScanRequester,None,None)
+    conn,btctrl = event_loop.run_until_complete(fac)
+    btctrl.process=my_process
     btctrl.send_scan_request()
 
     try:
@@ -55,29 +51,33 @@ def update_counters(call):
         conn.close()
         event_loop.close()
 
-
+        
 def setup_platform(hass, config, add_entities, discovery_info=None):
-
-    ha_entities = []
-    for device in config['devices']:
-        _LOGGER.error(device)
-        ha_entities.append(ExampleSensor(device['id'], device['name']))
-        inf[device['id']] = STATE_UNKNOWN
+    global scan_interval, scan_duration
+    ha_entities=[]
+    _LOGGER.error(config)
+    scan_interval = config['scan_interval']
+    scan_duration = config['scan_duration']
+    for device in config['devices']:        
+        ha_entities.append(ExampleSensor(device['id'],device['name']))
+        inf[device['id']]=STATE_UNKNOWN
     add_entities(ha_entities, True)
     async_track_time_interval(
-        hass, update_counters, timedelta(seconds=30)
+        hass, update_counters, scan_interval
     )
+    
 
 
 class ExampleSensor(Entity):
     """Representation of a Sensor."""
 
-    def __init__(self, counter_num, name):
+    def __init__(self,counter_num, name):
         """Initialize the sensor."""
         self._state = None
         self._name = name
         self._state = STATE_UNKNOWN
-        self._num = counter_num
+        self._num  = counter_num
+
 
     @property
     def name(self):
@@ -93,12 +93,10 @@ class ExampleSensor(Entity):
     def unit_of_measurement(self):
         """Return the unit of measurement."""
         return VOLUME_LITERS
-
     @property
     def icon(self):
         """Return the unit of measurement."""
         return 'mdi:water-pump'
-
     @property
     def unique_id(self):
         """Return Unique ID """
@@ -107,6 +105,6 @@ class ExampleSensor(Entity):
     def update(self):
         """Fetch new state data for the sensor.
         This is the only method that should fetch new data for Home Assistant.
-        """
-        # update_counters()
+        """  
+        # update_counters()              
         self._state = inf[self._num]
