@@ -1,7 +1,7 @@
 {
     "domain": "elehant_water",
     "name": "elehant_water",
-    "documentation": "https://www.example.com",
+    "documentation": "https://github.com/raxers/elehant_water",
     "dependencies": [],
     "codeowners": [],
     "requirements": ["aioblescan>=0.2.6"]
