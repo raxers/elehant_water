@@ -55,7 +55,7 @@ def update_counters(call):
 def setup_platform(hass, config, add_entities, discovery_info=None):
     global scan_interval, scan_duration
     ha_entities=[]
-    _LOGGER.error(config)
+    # _LOGGER.error(config)
     scan_interval = config['scan_interval']
     scan_duration = config['scan_duration']
     for device in config['devices']:        
