@@ -3,6 +3,6 @@
     "name": "elehant_water",
     "documentation": "https://github.com/raxers/elehant_water",
     "dependencies": [],
-    "codeowners": [@raxErs],
+    "codeowners": ["@raxErs"],
     "requirements": ["aioblescan>=0.2.6"]
 }
