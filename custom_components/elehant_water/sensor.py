@@ -7,7 +7,7 @@ from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.event import async_track_time_interval
 import random
 import logging
-from homeassistant.const import (VOLUME_LITERS, STATE_UNKNOWN)
+from homeassistant.const import (VOLUME_LITERS, STATE_UNKNOWN, VOLUME_CUBIC_METERS)
 
 _LOGGER = logging.getLogger(__name__)
 inf={}
@@ -31,7 +31,10 @@ def update_counters(call):
             payload = payload[1].val     
             c_num = int.from_bytes(payload[6:8], byteorder='little')
             c_count = int.from_bytes(payload[9:12], byteorder='little')
-            inf[c_num] = c_count/10
+            if measurement == 'm3':
+                inf[c_num] = c_count/10000
+            else:
+                inf[c_num] = c_count/10
     start = time.time()
     event_loop = asyncio.new_event_loop()
     asyncio.set_event_loop(event_loop)
@@ -53,11 +56,11 @@ def update_counters(call):
 
         
 def setup_platform(hass, config, add_entities, discovery_info=None):
-    global scan_interval, scan_duration
+    global scan_interval, scan_duration, measurement
     ha_entities=[]
-    # _LOGGER.error(config)
     scan_interval = config['scan_interval']
     scan_duration = config['scan_duration']
+    measurement = config.get('measurement')
     for device in config['devices']:        
         ha_entities.append(ExampleSensor(device['id'],device['name']))
         inf[device['id']]=STATE_UNKNOWN
@@ -92,7 +95,11 @@ class ExampleSensor(Entity):
     @property
     def unit_of_measurement(self):
         """Return the unit of measurement."""
-        return VOLUME_LITERS
+        if measurement =='m3':
+            return VOLUME_CUBIC_METERS
+        else:
+            return VOLUME_LITERS
+
     @property
     def icon(self):
         """Return the unit of measurement."""
