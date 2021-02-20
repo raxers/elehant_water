@@ -1,9 +1,9 @@
-# Elehant Water Sensor SVD-15 for Home Assistant
+# Elehant Water Sensor SVD-15 and SVT-15 for Home Assistant
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
 [![Donate](https://img.shields.io/badge/donate-Yandex-red.svg)](https://money.yandex.ru/to/41001371678546)
 
-# Компонент интеграции счетчиков воды Элехант СВД-15 с Home Assistant.
+# Компонент интеграции счетчиков воды Элехант СВД-15 и СВТ-15 с Home Assistant.
 Для интеграции требуется наличие Bluetooth модуля в сервере HA.
 
 **Установка**
@@ -15,16 +15,19 @@ sensor:
   - platform: elehant_water
     scan_duration: 10
     scan_interval: 30
-    mmeasurement: l
+    measurement: l
     devices:
       - id: 31560
         name: "Вода Горячая Ванная"
       - id: 31561
         name: "Вода Холодная Кухня"
-      - id: 31562
-        name: "Вода Горячая Кухня"
-      - id: 31563
-        name: "Вода Холодная Ванная"
+      # Для двухтарифных счетчиков номера надо указывать через подчеркивание и в кавычках
+      # Под первой записью укажите так же название для датчика температуры
+      - id: '31562_1'
+        name: "Вода Горячая Кухня 1"
+        name_temp: "Температура воды Кухня"
+      - id: '31562_2'
+        name: "Вода Горячая Кухня 2"
 ```
 
 Где: 
