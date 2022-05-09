@@ -14,20 +14,28 @@
 sensor:
   - platform: elehant_water
     scan_duration: 10
-    scan_interval: 30
-    measurement: l
+    scan_interval: 600
+    measurement_water: m3
+    measurement_gas: m3
     devices:
       - id: 31560
+        type: water
         name: "Вода Горячая Ванная"
       - id: 31561
+        type: water
         name: "Вода Холодная Кухня"
       # Для двухтарифных счетчиков номера надо указывать через подчеркивание и в кавычках
       # Под первой записью укажите так же название для датчика температуры
       - id: '31562_1'
+        type: water
         name: "Вода Горячая Кухня 1"
         name_temp: "Температура воды Кухня"
       - id: '31562_2'
+        type: water
         name: "Вода Горячая Кухня 2"
+      - id: 6998
+        type: gas
+        name: "Счетчик газа"
 ```
 
 Где: 
