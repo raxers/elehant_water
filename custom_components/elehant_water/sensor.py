@@ -16,6 +16,7 @@ from homeassistant.const import (
 
 _LOGGER = logging.getLogger("elehant_water")
 inf = {}
+_LOGGER.debug("init")
 
 
 def update_counters(call):
@@ -28,31 +29,48 @@ def update_counters(call):
             mac = ev.retrieve("peer")[0].val
         except:
             return
-        if str(mac).find("b0:01:02") != -1:
+
+        """СГБТ-1.8"""
+        if str(mac).find('b0:10:01') !=-1:
+            _LOGGER.debug("SEE gaz counter")
+            manufacturer_data = ev.retrieve("Manufacturer Specific Data")
+            payload = manufacturer_data[0].payload
+            payload = payload[1].val
+            c_num = int.from_bytes(payload[6:8], byteorder='little')
+            c_count = int.from_bytes(payload[9:12], byteorder='little')
+            if measurement_gas == 'm3':
+                inf[c_num] = c_count/10000
+            else:
+                inf[c_num] = c_count/10
+
+        """СВД-15, СВД-20"""
+        if (str(mac).find('b0:01:02') !=-1) or (str(mac).find('b0:02:02') !=-1):
             _LOGGER.debug("SEE 1 tariff counter")
             manufacturer_data = ev.retrieve("Manufacturer Specific Data")
             payload = manufacturer_data[0].payload
             payload = payload[1].val
             c_num = int.from_bytes(payload[6:8], byteorder="little")
             c_count = int.from_bytes(payload[9:12], byteorder="little")
-            if measurement == "m3":
+            if measurement_water == "m3":
                 inf[c_num] = c_count / 10000
             else:
                 inf[c_num] = c_count / 10
-        if (str(mac).find("b0:03:02") != -1) or (str(mac).find("b0:04:02") != -1):
+
+        """СВТ-15 холодная, СВТ-15 горячая, СВТ-20 холодная, СВТ-20 горячая"""
+        if (str(mac).find('b0:03:02') !=-1) or (str(mac).find('b0:04:02') !=-1) or (str(mac).find('b0:05:02') !=-1) or (str(mac).find('b0:06:02') !=-1):
             _LOGGER.debug("SEE 2 tariff counter")
             manufacturer_data = ev.retrieve("Manufacturer Specific Data")
             payload = manufacturer_data[0].payload
             payload = payload[1].val
             c_num = int.from_bytes(payload[6:8], byteorder="little")
-            if str(mac).find("b0:03:02") != -1:
+            if (str(mac).find('b0:03:02') !=-1) or (str(mac).find('b0:05:02') !=-1):
                 c_num = str(c_num) + "_1"
             else:
                 c_num = str(c_num) + "_2"
             c_count = int.from_bytes(payload[9:12], byteorder="little")
             c_temp = int.from_bytes(payload[14:16], byteorder="little") / 100
             inf[c_num.split("_")[0]] = c_temp
-            if measurement == "m3":
+            if measurement_water == "m3":
                 inf[c_num] = c_count / 10000
             else:
                 inf[c_num] = c_count / 10
@@ -78,20 +96,26 @@ def update_counters(call):
 
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
-    global scan_interval, scan_duration, measurement, current_event_loop
+    global scan_interval, scan_duration, measurement_water, measurement_gas, current_event_loop
     ha_entities = []
     scan_interval = config["scan_interval"]
     scan_duration = config["scan_duration"]
     current_event_loop = None
-    measurement = config.get("measurement")
+    measurement_water = config.get("measurement_water")
+    measurement_gas = config.get("measurement_gas")
     for device in config["devices"]:
-        ha_entities.append(WaterSensor(device["id"], device["name"]))
-        if "_1" in str(device["id"]):
-            ha_entities.append(
-                WaterTempSensor(device["id"].split("_")[0], device["name_temp"])
-            )
-            inf[device["id"].split("_")[0]] = STATE_UNKNOWN
-        inf[device["id"]] = STATE_UNKNOWN
+        if device["type"] == "gas":
+            ha_entities.append(GasSensor(device["id"], device["name"]))
+            inf[device["id"]] = STATE_UNKNOWN
+        else:
+            ha_entities.append(WaterSensor(device["id"], device["name"]))
+            if "_1" in str(device["id"]):
+                ha_entities.append(
+                    WaterTempSensor(device["id"].split("_")[0], device["name_temp"])
+                )
+                inf[device["id"].split("_")[0]] = STATE_UNKNOWN
+            inf[device["id"]] = STATE_UNKNOWN
+
     add_entities(ha_entities, True)
     track_time_interval(hass, update_counters, scan_interval)
 
@@ -163,7 +187,7 @@ class WaterSensor(Entity):
     @property
     def unit_of_measurement(self):
         """Return the unit of measurement."""
-        if measurement == "m3":
+        if measurement_water == "m3":
             return VOLUME_CUBIC_METERS
         else:
             return VOLUME_LITERS
@@ -172,6 +196,52 @@ class WaterSensor(Entity):
     def icon(self):
         """Return the unit of measurement."""
         return "mdi:water-pump"
+
+    @property
+    def unique_id(self):
+        """Return Unique ID"""
+        return "elehant_" + str(self._num)
+
+    def update(self):
+        """Fetch new state data for the sensor.
+        This is the only method that should fetch new data for Home Assistant.
+        """
+        # update_counters()
+        self._state = inf[self._num]
+
+
+class GasSensor(Entity):
+    """Representation of a Sensor."""
+
+    def __init__(self, counter_num, name):
+        """Initialize the sensor."""
+        self._state = None
+        self._name = name
+        self._state = STATE_UNKNOWN
+        self._num = counter_num
+
+    @property
+    def name(self):
+        """Return the name of the sensor."""
+        return self._name
+
+    @property
+    def state(self):
+        """Return the state of the sensor."""
+        return self._state
+
+    @property
+    def unit_of_measurement(self):
+        """Return the unit of measurement."""
+        if measurement_gas == "m3":
+            return VOLUME_CUBIC_METERS
+        else:
+            return VOLUME_LITERS
+
+    @property
+    def icon(self):
+        """Return the unit of measurement."""
+        return "mdi:gas-burner"
 
     @property
     def unique_id(self):
