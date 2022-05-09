@@ -31,7 +31,7 @@ def update_counters(call):
             return
 
         """СГБТ-1.8"""
-        if str(mac).find('b0:10:01') !=-1:
+        if (str(mac).find('b0:10:01') !=-1) or (str(mac).find('b0:11:01') !=-1) or (str(mac).find('b0:12:01') !=-1):
             _LOGGER.debug("SEE gaz counter")
             manufacturer_data = ev.retrieve("Manufacturer Specific Data")
             payload = manufacturer_data[0].payload
