@@ -36,7 +36,7 @@ def update_counters(call):
             manufacturer_data = ev.retrieve("Manufacturer Specific Data")
             payload = manufacturer_data[0].payload
             payload = payload[1].val
-            c_num = int.from_bytes(payload[6:8], byteorder='little')
+            c_num = int.from_bytes(payload[6:9], byteorder='little')
             c_count = int.from_bytes(payload[9:12], byteorder='little')
             if measurement_gas == 'm3':
                 inf[c_num] = c_count/10000
@@ -49,7 +49,7 @@ def update_counters(call):
             manufacturer_data = ev.retrieve("Manufacturer Specific Data")
             payload = manufacturer_data[0].payload
             payload = payload[1].val
-            c_num = int.from_bytes(payload[6:8], byteorder="little")
+            c_num = int.from_bytes(payload[6:9], byteorder="little")
             c_count = int.from_bytes(payload[9:12], byteorder="little")
             if measurement_water == "m3":
                 inf[c_num] = c_count / 10000
@@ -62,7 +62,7 @@ def update_counters(call):
             manufacturer_data = ev.retrieve("Manufacturer Specific Data")
             payload = manufacturer_data[0].payload
             payload = payload[1].val
-            c_num = int.from_bytes(payload[6:8], byteorder="little")
+            c_num = int.from_bytes(payload[6:9], byteorder="little")
             if (str(mac).find('b0:03:02') !=-1) or (str(mac).find('b0:05:02') !=-1):
                 c_num = str(c_num) + "_1"
             else:
