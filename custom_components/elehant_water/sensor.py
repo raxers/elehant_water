@@ -19,10 +19,18 @@ inf = {}
 _LOGGER.debug("init")
 
 
+def stop_loop(loop):
+    _LOGGER.debug("Entering function stop_loop()..")
+    loop.stop()
+    _LOGGER.debug("Exiting function stop_loop()..")
+
 def update_counters(call):
     global scan_duration, current_event_loop
+    # _LOGGER.setLevel(logging.DEBUG)
+    _LOGGER.debug("scan_duration = %s, current_event_loop = %s", str(scan_duration), str(current_event_loop))
 
     def my_process(data):
+        # _LOGGER.debug("Entering function <my_process> with arg = %s", str(data))
         ev = aiobs.HCI_Event()
         xx = ev.decode(data)
         try:
@@ -30,6 +38,7 @@ def update_counters(call):
         except:
             return
 
+        # _LOGGER.debug("Found MAC = %s", str(mac))
         """СГБТ-1.8"""
         if (str(mac).find('b0:10:01') !=-1) or (str(mac).find('b0:11:01') !=-1) or (str(mac).find('b0:12:01') !=-1):
             _LOGGER.debug("SEE gaz counter")
@@ -76,6 +85,7 @@ def update_counters(call):
                 inf[c_num] = c_count / 10
 
     if current_event_loop is None:
+        _LOGGER.debug("Starting new loop..")
         current_event_loop = asyncio.new_event_loop()
         asyncio.set_event_loop(current_event_loop)
     mysocket = aiobs.create_bt_socket(0)
@@ -84,15 +94,22 @@ def update_counters(call):
     )
     conn, btctrl = current_event_loop.run_until_complete(fac)
     btctrl.process = my_process
-    current_event_loop.run_until_complete(btctrl.send_scan_request(scan_duration))
+    _LOGGER.debug("Send scan request..")
+    current_event_loop.run_until_complete(btctrl.send_scan_request())
+    _LOGGER.debug("..finish scan request")
+    current_event_loop.call_later(scan_duration, stop_loop, current_event_loop)
     try:
+        _LOGGER.debug("Run loop forever..")
         current_event_loop.run_forever()
+        _LOGGER.debug("Did we reach that point?")
     finally:
-        current_event_loop(btctrl.stop_scan_request())
+        _LOGGER.debug("Close loop..")
+        # current_event_loop(btctrl.stop_scan_request())
+        current_event_loop.run_until_complete(btctrl.stop_scan_request())
         conn.close()
         current_event_loop.run_until_complete(asyncio.sleep(0))
-
         current_event_loop.close()
+        current_event_loop = None
 
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
