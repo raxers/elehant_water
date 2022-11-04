@@ -5,5 +5,5 @@
     "issue_tracker": "https://github.com/raxers/elehant_water/issues",
     "codeowners": ["@raxErs"],
     "requirements": ["aioblescan>=0.2.6"],
-    "version": "0.5.4"
+    "version": "0.5.5"
 }
