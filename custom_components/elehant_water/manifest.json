@@ -1,9 +1,9 @@
 {
     "domain": "elehant_water",
     "name": "Elehant Water",
-    "documentation": "https://github.com/raxers/elehant_water",
-    "issue_tracker": "https://github.com/raxers/elehant_water/issues",
-    "codeowners": ["@raxErs"],
+    "documentation": "https://github.com/SzenProgs/elehant_water",
+    "issue_tracker": "https://github.com/SzenProgs/elehant_water/issues",
+    "codeowners": ["@SzenProgs"],
     "requirements": ["aioblescan>=0.2.6"],
     "version": "0.5.6"
 }
