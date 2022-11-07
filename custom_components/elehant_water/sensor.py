@@ -5,6 +5,7 @@ import asyncio
 import time
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.event import track_time_interval
+from homeassistant.components.sensor import SensorEntity, SensorStateClass, SensorDeviceClass
 import random
 import logging
 from homeassistant.const import (
@@ -137,7 +138,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     track_time_interval(hass, update_counters, scan_interval)
 
 
-class WaterTempSensor(Entity):
+class WaterTempSensor(SensorEntity):
     """Representation of a Sensor."""
 
     def __init__(self, counter_num, name):
@@ -160,8 +161,15 @@ class WaterTempSensor(Entity):
     @property
     def unit_of_measurement(self):
         """Return the unit of measurement."""
-
         return TEMP_CELSIUS
+
+    @property
+    def device_class(self):
+        return SensorDeviceClass.TEMPERATURE
+
+    @property
+    def state_class(self):
+        return SensorStateClass.MEASUREMENT
 
     @property
     def icon(self):
@@ -181,7 +189,7 @@ class WaterTempSensor(Entity):
         self._state = inf[self._num]
 
 
-class WaterSensor(Entity):
+class WaterSensor(SensorEntity):
     """Representation of a Sensor."""
 
     def __init__(self, counter_num, name):
@@ -210,6 +218,14 @@ class WaterSensor(Entity):
             return VOLUME_LITERS
 
     @property
+    def device_class(self):
+        return SensorDeviceClass.WATER
+
+    @property
+    def state_class(self):
+        return SensorStateClass.TOTAL_INCREASING
+
+    @property
     def icon(self):
         """Return the unit of measurement."""
         return "mdi:water-pump"
@@ -227,7 +243,7 @@ class WaterSensor(Entity):
         self._state = inf[self._num]
 
 
-class GasSensor(Entity):
+class GasSensor(SensorEntity):
     """Representation of a Sensor."""
 
     def __init__(self, counter_num, name):
@@ -254,6 +270,14 @@ class GasSensor(Entity):
             return VOLUME_CUBIC_METERS
         else:
             return VOLUME_LITERS
+
+    @property
+    def device_class(self):
+        return SensorDeviceClass.GAS
+
+    @property
+    def state_class(self):
+        return SensorStateClass.TOTAL_INCREASING
 
     @property
     def icon(self):
