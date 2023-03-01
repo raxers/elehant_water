@@ -1,7 +1,6 @@
 # Elehant Water and Gas Sensor for Home Assistant
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
-[![Donate](https://img.shields.io/badge/donate-Yandex-red.svg)](https://money.yandex.ru/to/41001371678546)
 
 # Компонент интеграции счётчиков воды и газа Элехант с Home Assistant.
 ## Требования
