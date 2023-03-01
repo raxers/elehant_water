@@ -39,9 +39,11 @@ def update_counters(call):
         except:
             return
 
+        mac = lc(mac)
+
         # _LOGGER.debug("Found MAC = %s", str(mac))
-        """СГБТ-1.8, СГБТ-3.2, СГБТ-4.0, СГБТ-4.0 ТК"""
-        if (str(mac).find('b0:10:01') !=-1) or (str(mac).find('b0:11:01') !=-1) or (str(mac).find('b0:12:01') !=-1) or (str(mac).find('b0:32:01') !=-1):
+        """СГБТ-1.8, СГБТ-3.2, СГБТ-4.0, СГБТ-4.0 ТК, СОНИК G4ТК"""
+        if (str(mac).find('b0:10:01') !=-1) or (str(mac).find('b0:11:01') !=-1) or (str(mac).find('b0:12:01') !=-1) or (str(mac).find('b0:32:01') !=-1) or (str(mac).find('b0:42:01') !=-1):
             _LOGGER.debug("SEE gaz counter")
             manufacturer_data = ev.retrieve("Manufacturer Specific Data")
             payload = manufacturer_data[0].payload
