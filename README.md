@@ -23,8 +23,8 @@
 *Если ваш счётчик Элехант отсутствует в списке - пишите - добавим*
 
 ## Установка
-Скопируйте папку elehant_water в custom_components в корне конфигурации Home Assistant
-В configuration.yaml добавьте следующие строки:
+* Скопируйте папку **elehant_water** в **custom_components** в корне конфигурации Home Assistant
+* В **configuration.yaml** добавьте следующие строки:
 
 ```yaml
 sensor:
