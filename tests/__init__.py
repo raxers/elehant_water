@@ -26,6 +26,8 @@ GAS_PAYLOAD = bytes.fromhex("80A896010112030201F90900007F710B0F")
 # firmware 1.1 and СВД-20 with firmware 2.2.
 GAS_REAL_ADDRESS = "B0:12:01:00:05:55"
 GAS_REAL_PAYLOAD = bytes.fromhex("80060a010112550500a1f335006704d90b")
+# The same meter alternates with packets flagged 0x88 (bit 0x08 is unused).
+GAS_REAL_FLAGGED_PAYLOAD = bytes.fromhex("88070a010112550500a5f335006704d90b")
 SVD20_ADDRESS = "B0:02:02:00:58:69"
 SVD20_PAYLOAD = bytes.fromhex("80eba0010202695800445e0a007f840716")
 

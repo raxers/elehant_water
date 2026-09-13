@@ -14,6 +14,7 @@ from . import (
     GAS_ADDRESS,
     GAS_PAYLOAD,
     GAS_REAL_ADDRESS,
+    GAS_REAL_FLAGGED_PAYLOAD,
     GAS_REAL_PAYLOAD,
     SVD15_ADDRESS,
     SVD15_PAYLOAD,
@@ -68,6 +69,16 @@ def test_gas_meter_has_no_temperature() -> None:
     assert reading.title == "СГБД-4.0 1365"
     assert reading.firmware == "1.1"
     assert reading.values == {"volume": 353.5777, "battery": 100}
+
+
+def test_extra_flags_accepted() -> None:
+    """Test a real packet with flags 0x88: only bit 0x80 marks a valid packet."""
+    reading = parse_advertisement(GAS_REAL_ADDRESS, GAS_REAL_FLAGGED_PAYLOAD)
+    assert reading is not None
+    assert reading.title == "СГБД-4.0 1365"
+    assert reading.firmware == "1.1"
+    # Bit 0x08 is not the high resolution flag, byte 2 adds no extra digit.
+    assert reading.values == {"volume": 353.5781, "battery": 100}
 
 
 def test_temperature_hidden_for_firmware() -> None:
