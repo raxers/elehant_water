@@ -10,7 +10,8 @@ Bluetooth-объявлениях. Интеграция пассивно слуш
 интеграцию [Bluetooth](https://www.home-assistant.io/integrations/bluetooth/).
 Это значит, что подойдёт как адаптер в самом сервере HA, так и
 [ESPHome Bluetooth Proxy](https://esphome.io/components/bluetooth_proxy.html),
-поставленный рядом со счётчиком.
+поставленный рядом со счётчиком
+([инструкция по подключению через прокси](docs/esphome-bluetooth-proxy.md)).
 
 ## Установка
 
