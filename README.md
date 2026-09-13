@@ -79,8 +79,9 @@ Bluetooth-объявлениях. Интеграция пассивно слуш
 
 ## Протокол
 
-Формат объявлений описан в [`parser.py`](custom_components/elehant_water/parser.py).
-Он сверен с разбором пакетов в официальном приложении Элехант и с реальными
+Формат объявлений всех типов счётчиков подробно описан в
+[docs/protocol.md](docs/protocol.md), реализация — в
+[`parser.py`](custom_components/elehant_water/parser.py). Формат сверен с разбором пакетов в официальном приложении Элехант и с реальными
 счётчиками. Первые сведения о протоколе собраны сообществом, см.
 [vooon/elehant-to-mqtt](https://github.com/vooon/elehant-to-mqtt/blob/master/docs/protocol.md).
 Электросчётчики, теплосчётчики и двухтарифные пакеты пока не проверены на
