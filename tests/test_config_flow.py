@@ -2,6 +2,7 @@
 
 from unittest.mock import patch
 
+from homeassistant.components.bluetooth import async_get_advertisement_callback
 from homeassistant.config_entries import SOURCE_BLUETOOTH, SOURCE_USER
 from homeassistant.const import CONF_ADDRESS
 from homeassistant.core import HomeAssistant
@@ -125,3 +126,21 @@ async def test_user_replaces_discovery_flow(hass: HomeAssistant) -> None:
         )
     assert result["type"] is FlowResultType.CREATE_ENTRY
     assert not hass.config_entries.flow.async_progress_by_handler(DOMAIN)
+
+
+async def test_rediscovered_after_removal(hass: HomeAssistant) -> None:
+    """Test that a removed meter is offered for setup again right away."""
+    entry = MockConfigEntry(domain=DOMAIN, unique_id=WATER_ADDRESS)
+    entry.add_to_hass(hass)
+    assert await hass.config_entries.async_setup(entry.entry_id)
+    await hass.async_block_till_done()
+
+    async_get_advertisement_callback(hass)(WATER_SERVICE_INFO)
+    await hass.async_block_till_done()
+    assert not hass.config_entries.flow.async_progress_by_handler(DOMAIN)
+
+    await hass.config_entries.async_remove(entry.entry_id)
+    await hass.async_block_till_done()
+
+    flows = hass.config_entries.flow.async_progress_by_handler(DOMAIN)
+    assert [flow["context"]["unique_id"] for flow in flows] == [WATER_ADDRESS]

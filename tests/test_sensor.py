@@ -1,8 +1,5 @@
 """Tests for the Elehant sensors."""
 
-from collections.abc import Generator
-from unittest.mock import patch
-
 from homeassistant.components.bluetooth import async_get_advertisement_callback
 from homeassistant.components.sensor import (
     ATTR_STATE_CLASS,
@@ -19,7 +16,6 @@ from homeassistant.const import (
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import device_registry as dr, entity_registry as er
-import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.elehant_water.const import DOMAIN
@@ -32,19 +28,6 @@ from . import (
     WATER_SERVICE_INFO,
     make_service_info,
 )
-
-
-@pytest.fixture(autouse=True)
-def no_discovery_flows() -> Generator[None]:
-    """Keep injected advertisements from starting discovery flows.
-
-    Company id 0xFFFF is shared with other integrations (e.g. kegtron),
-    whose requirements are not installed in the test environment.
-    """
-    with patch(
-        "homeassistant.components.bluetooth.manager.discovery_flow.async_create_flow"
-    ):
-        yield
 
 
 def _device(
