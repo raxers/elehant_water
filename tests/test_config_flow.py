@@ -14,9 +14,12 @@ from custom_components.elehant_water.const import DOMAIN
 from . import (
     GAS_ADDRESS,
     GAS_SERVICE_INFO,
+    SVD15_ADDRESS,
+    SVD15_PAYLOAD,
     WATER_ADDRESS,
     WATER_B1_SERVICE_INFO,
     WATER_SERVICE_INFO,
+    make_service_info,
 )
 
 PATCH_SETUP_ENTRY = "custom_components.elehant_water.async_setup_entry"
@@ -42,6 +45,19 @@ async def test_bluetooth_discovery(hass: HomeAssistant) -> None:
     assert result["title"] == "СВД-15 9960"
     assert result["data"] == {}
     assert result["result"].unique_id == WATER_ADDRESS
+
+
+async def test_bluetooth_discovery_history_packet(hass: HomeAssistant) -> None:
+    """Test discovery from a packet without readings, e.g. consumption history."""
+    payload = bytearray(SVD15_PAYLOAD)
+    payload[3] = 8
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN,
+        context={"source": SOURCE_BLUETOOTH},
+        data=make_service_info(SVD15_ADDRESS, bytes(payload)),
+    )
+    assert result["type"] is FlowResultType.FORM
+    assert result["description_placeholders"] == {"name": "СВД-15 12345"}
 
 
 async def test_bluetooth_discovery_not_supported(hass: HomeAssistant) -> None:
