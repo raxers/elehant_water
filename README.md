@@ -148,3 +148,6 @@ uv pip install --python .venv/bin/python -r requirements_test.txt
 ```
 
 Лицензия GPL v3.
+
+Если интеграция пригодилась, автора можно поддержать на
+[Boosty](https://boosty.to/raxer/donate).
