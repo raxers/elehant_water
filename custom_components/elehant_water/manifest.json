@@ -4,7 +4,6 @@
   "bluetooth": [
     {
       "connectable": false,
-      "manufacturer_data_start": [128],
       "manufacturer_id": 65535
     }
   ],
@@ -16,5 +15,5 @@
   "iot_class": "local_push",
   "issue_tracker": "https://github.com/raxers/elehant_water/issues",
   "requirements": [],
-  "version": "1.0.1"
+  "version": "1.1.0"
 }

@@ -13,7 +13,7 @@ from homeassistant.const import CONF_ADDRESS
 import voluptuous as vol
 
 from .const import DOMAIN
-from .parser import parse_manufacturer_data
+from .parser import identify_meter
 
 
 class ElehantConfigFlow(ConfigFlow, domain=DOMAIN):
@@ -32,7 +32,7 @@ class ElehantConfigFlow(ConfigFlow, domain=DOMAIN):
         """Handle the bluetooth discovery step."""
         await self.async_set_unique_id(discovery_info.address)
         self._abort_if_unique_id_configured()
-        reading = parse_manufacturer_data(
+        reading = identify_meter(
             discovery_info.address, discovery_info.manufacturer_data
         )
         if reading is None:
@@ -72,9 +72,7 @@ class ElehantConfigFlow(ConfigFlow, domain=DOMAIN):
             address = discovery_info.address
             if address in current_addresses or address in self._discovered_devices:
                 continue
-            if reading := parse_manufacturer_data(
-                address, discovery_info.manufacturer_data
-            ):
+            if reading := identify_meter(address, discovery_info.manufacturer_data):
                 self._discovered_devices[address] = reading.title
 
         if not self._discovered_devices:

@@ -21,5 +21,26 @@
       "no_devices_found": "No Elehant meters found. Meters broadcast rarely, wait a few minutes and try again.",
       "not_supported": "Device not supported"
     }
+  },
+  "entity": {
+    "sensor": {
+      "volume_tariff": { "name": "Tariff {tariff}" },
+      "coolant_volume": { "name": "Coolant volume" },
+      "temperature_inlet": { "name": "Inlet temperature" },
+      "temperature_outlet": { "name": "Outlet temperature" },
+      "energy_import": { "name": "Active energy import" },
+      "energy_export": { "name": "Active energy export" },
+      "energy_import_tariff": { "name": "Active energy import, tariff {tariff}" },
+      "energy_export_tariff": { "name": "Active energy export, tariff {tariff}" },
+      "reactive_energy_import": { "name": "Reactive energy import" },
+      "reactive_energy_export": { "name": "Reactive energy export" },
+      "reactive_energy_import_tariff": { "name": "Reactive energy import, tariff {tariff}" },
+      "reactive_energy_export_tariff": { "name": "Reactive energy export, tariff {tariff}" },
+      "voltage_phase": { "name": "Phase {phase} voltage" },
+      "voltage_line": { "name": "Line {phases} voltage" },
+      "current_phase": { "name": "Phase {phase} current" },
+      "neutral_current": { "name": "Neutral current" },
+      "differential_current": { "name": "Differential current" }
+    }
   }
 }

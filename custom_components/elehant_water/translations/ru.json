@@ -21,5 +21,26 @@
       "no_devices_found": "Счётчики Элехант не найдены. Счётчики передают данные редко, подождите несколько минут и попробуйте снова.",
       "not_supported": "Устройство не поддерживается"
     }
+  },
+  "entity": {
+    "sensor": {
+      "volume_tariff": { "name": "Тариф {tariff}" },
+      "coolant_volume": { "name": "Объём теплоносителя" },
+      "temperature_inlet": { "name": "Температура на входе" },
+      "temperature_outlet": { "name": "Температура на выходе" },
+      "energy_import": { "name": "Активная энергия А+" },
+      "energy_export": { "name": "Активная энергия А−" },
+      "energy_import_tariff": { "name": "Активная энергия А+, тариф {tariff}" },
+      "energy_export_tariff": { "name": "Активная энергия А−, тариф {tariff}" },
+      "reactive_energy_import": { "name": "Реактивная энергия R+" },
+      "reactive_energy_export": { "name": "Реактивная энергия R−" },
+      "reactive_energy_import_tariff": { "name": "Реактивная энергия R+, тариф {tariff}" },
+      "reactive_energy_export_tariff": { "name": "Реактивная энергия R−, тариф {tariff}" },
+      "voltage_phase": { "name": "Напряжение фазы {phase}" },
+      "voltage_line": { "name": "Напряжение {phases}" },
+      "current_phase": { "name": "Ток фазы {phase}" },
+      "neutral_current": { "name": "Ток нейтрали" },
+      "differential_current": { "name": "Дифференциальный ток" }
+    }
   }
 }
