@@ -1,1 +1,13 @@
 pytest-homeassistant-custom-component==0.13.364
+
+# Requirements of the bluetooth and usb components of the pinned Home Assistant
+# (not installed by the pytest plugin). Update together with the plugin.
+aiousbwatcher==1.1.2
+bleak==3.0.2
+bleak-retry-connector==4.7.0
+bluetooth-adapters==2.4.0
+bluetooth-auto-recovery==1.6.4
+bluetooth-data-tools==1.29.24
+dbus-fast==5.0.22
+habluetooth==6.26.11
+serialx==1.10.0
