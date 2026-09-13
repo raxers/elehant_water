@@ -1,9 +1,20 @@
 {
-    "domain": "elehant_water",
-    "name": "Elehant Water",
-    "documentation": "https://github.com/raxers/elehant_water",
-    "issue_tracker": "https://github.com/raxers/elehant_water/issues",
-    "codeowners": ["@raxErs"],
-    "requirements": ["aioblescan>=0.2.6"],
-    "version": "0.4.1"
+  "domain": "elehant_water",
+  "name": "Elehant",
+  "bluetooth": [
+    {
+      "connectable": false,
+      "manufacturer_data_start": [128],
+      "manufacturer_id": 65535
+    }
+  ],
+  "codeowners": ["@raxers"],
+  "config_flow": true,
+  "dependencies": ["bluetooth_adapters"],
+  "documentation": "https://github.com/raxers/elehant_water",
+  "integration_type": "device",
+  "iot_class": "local_push",
+  "issue_tracker": "https://github.com/raxers/elehant_water/issues",
+  "requirements": [],
+  "version": "1.0.0"
 }
